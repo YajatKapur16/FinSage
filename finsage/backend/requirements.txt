@@ -1,0 +1,44 @@
+# General Purpose and HTTP Requests
+requests
+chardet
+tqdm
+numpy
+pandas
+pillow
+
+# Text Processing and NLP
+nltk
+pymupdf
+pytesseract
+sentence-transformers
+
+# Machine Learning and LLMs
+transformers
+bitsandbytes
+huggingface-hub
+accelerate
+scikit-learn
+
+# PDF and Document Handling
+pdfplumber
+
+# Embedding and Vector Search
+faiss-cpu
+
+# LangChain and Related Tools
+langchain
+langchain-community
+langchain-huggingface
+chromadb
+
+# Web API and Server
+fastapi
+uvicorn
+nest-asyncio
+python-multipart
+pyngrok
+
+# Error Handling and Retry
+tenacity
+
+python-dotenv
