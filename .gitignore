@@ -1,3 +1,4 @@
 finsage/backend/app/data/input_pdfs/
 finsage/backend/app/data/processed_pdfs/
 finsage/backend/app/data/vector_database/
+.env
