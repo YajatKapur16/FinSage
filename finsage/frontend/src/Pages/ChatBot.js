@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import '../Styles/ChatBot.css';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 const FinSageChatbot = () => {
     const [messages, setMessages] = useState([]);
@@ -43,7 +44,7 @@ const FinSageChatbot = () => {
         <header className="finsage-header">
           <div className="finsage-auth">
             <button className="finsage-sign-in">Sign In</button>
-            <div className="finsage-user-icon"></div>
+            <AccountCircleOutlinedIcon style={{fontSize:"30px"}}></AccountCircleOutlinedIcon>
           </div>
         </header>
         <main className="finsage-main">

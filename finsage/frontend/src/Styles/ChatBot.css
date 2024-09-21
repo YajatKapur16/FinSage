@@ -38,6 +38,7 @@
     font-style: normal;
     color: #ff4922;
     margin-left: 15px;
+    margin-bottom: 0;
     padding: 0;
   }
     
@@ -48,7 +49,7 @@
     border-radius: 9999px;
     border: none;
     cursor: pointer;
-    margin-right: 0.5rem;
+    margin-right: 1rem;
     font-weight: bold;
   }
   
@@ -154,7 +155,7 @@
   .finsage-input-container {
     position: relative;
     width: 70%;
-    margin-left: 200px;
+    margin-left: 160px;
     margin-bottom: 60px;
   }
   
