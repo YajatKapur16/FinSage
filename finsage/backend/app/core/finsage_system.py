@@ -19,17 +19,17 @@ class FinSageAdvisorSystem:
         self.pdf_pipeline = DocumentProcessingPipeline(pdf_input_dir, r"finsage\backend\app\data\processed_pdfs")
         
         # Process PDFs and get processed files
-        # processed_files = self.pdf_pipeline.run()
+        processed_files = self.pdf_pipeline.run()
         
-        # # Load documents
-        # documents = self.load_documents(r"finsage\backend\app\data\processed_pdfs")
+        # Load documents
+        documents = self.load_documents(r"finsage\backend\app\data\processed_pdfs")
         
         # Initialize vector store
-        # self.vector_store = ChromaVectorStore()
-        # self.vector_store.add_documents(documents)
+        self.vector_store = ChromaVectorStore()
+        self.vector_store.add_documents(documents)
         
         # Save vector store
-        # self.vector_store.save()
+        self.vector_store.save()
         
         self.vector_store = ChromaVectorStore.load(vector_db_dir)
 
