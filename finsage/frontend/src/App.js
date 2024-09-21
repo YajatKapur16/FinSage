@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginSignup from "./Pages/LoginSignup";
+import Chatbot from "./Pages/ChatBot"; 
 import "./App.css";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<LoginSignup />} />
+          <Route path="/" element={<Chatbot />} />
         </Routes>
       </div>
     </Router>

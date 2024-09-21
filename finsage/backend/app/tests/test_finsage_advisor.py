@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = "https://2685-136-233-9-98.ngrok-free.app/query"
+url = "https://3835-136-233-9-98.ngrok-free.app/query"
 text = input()
 payload = {"text": f"{text}"}
 headers = {"Content-Type": "application/json"}
