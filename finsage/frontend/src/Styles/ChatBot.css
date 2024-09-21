@@ -137,10 +137,12 @@
   
   .finsage-user-message .finsage-message-content {
     background-color: #ff4922;
+    margin-right: 20px;
 }
   
   .finsage-bot-message .finsage-message-content {
-    background-color: #2c91ff;  
+    background-color: #2c91ff;
+    margin-left: 20px;  
 }
   
   .finsage-input-form {
