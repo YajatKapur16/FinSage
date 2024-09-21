@@ -10,6 +10,8 @@ from core.rag_pipeline import FinSageAdvisor
 from utils.helpers import save_conversation_history, load_conversation_history, summarize_conversation_history
 from utils.helpers import create_rag_pipeline
 from core.language_model import LLMResponse
+from langchain_community.vectorstores import Chroma
+
 class FinSageAdvisorSystem:
     def __init__(self, pdf_input_dir: str, vector_db_dir: str):
         logger.info("Initializing FinSageAdvisorSystem")
