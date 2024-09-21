@@ -40,23 +40,19 @@ def main():
             if user_query.lower() == 'quit':
                 break            
 
-            # Get advice
             logger.info("Processing user query")
             response = advisor_system.get_advice(user_query, conversation_history)
 
-            # Print response
             print(f"AI: {response.text}")
 
             if "I don't have enough information" not in response.text:
                 conversation_history.append({"role": "human", "content": user_query})
                 conversation_history.append({"role": "ai", "content": response.text})
 
-            # Save conversation history periodically
             if len(conversation_history) % 10 == 0:
                 logger.info("Saving conversation history")
                 advisor_system.save_conversation(conversation_history, "conversation_history.txt")
 
-            # Summarize conversation if it gets too long
             if len(conversation_history) > 20:
                 logger.info("Summarizing conversation history")
                 summary = advisor_system.summarize_conversation(conversation_history)
@@ -67,11 +63,9 @@ def main():
     except Exception as e:
         logger.error(f"An error occurred: {str(e)}")
     finally:
-        # Save final conversation history
         logger.info("Saving final conversation history")
         advisor_system.save_conversation(conversation_history, "final_conversation_history.txt")
 
-        # Save final system state
         logger.info("Saving final system state")
         advisor_system.save_system_state(system_state_dir)
         logger.info("FinSageAdvisorSystem session ended")

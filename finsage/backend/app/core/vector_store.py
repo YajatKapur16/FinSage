@@ -76,7 +76,7 @@ class ChromaVectorStore:
     def load(cls, persist_directory: str = r"finsage\backend\app\data\vector_database"):
         logger.info(f"Loading vector store from {persist_directory}")
         instance = cls(persist_directory=persist_directory)
-        instance.vectorstore = Chroma(persist_directory=persist_directory, embedding_function=instance.embedding_model, collection_name='JFM_Chatbot' )
+        instance.vectorstore = Chroma(persist_directory=persist_directory, embedding_function=instance.embedding_model, collection_name='FinSageChatbot' )
         logger.info("Vector store loaded successfully")
         return instance
     

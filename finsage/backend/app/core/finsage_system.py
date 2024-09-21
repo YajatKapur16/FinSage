@@ -10,7 +10,6 @@ from core.rag_pipeline import FinSageAdvisor
 from utils.helpers import save_conversation_history, load_conversation_history, summarize_conversation_history
 from utils.helpers import create_rag_pipeline
 from core.language_model import LLMResponse
-import chromadb
 class FinSageAdvisorSystem:
     def __init__(self, pdf_input_dir: str, vector_db_dir: str):
         logger.info("Initializing FinSageAdvisorSystem")
@@ -18,18 +17,18 @@ class FinSageAdvisorSystem:
         # Initialize PDF processing pipeline
         self.pdf_pipeline = DocumentProcessingPipeline(pdf_input_dir, r"finsage\backend\app\data\processed_pdfs")
         
-        # Process PDFs and get processed files
-        processed_files = self.pdf_pipeline.run()
+        # # Process PDFs and get processed files
+        # processed_files = self.pdf_pipeline.run()
         
-        # Load documents
-        documents = self.load_documents(r"finsage\backend\app\data\processed_pdfs")
+        # # Load documents
+        # documents = self.load_documents(r"finsage\backend\app\data\processed_pdfs")
         
-        # Initialize vector store
-        self.vector_store = ChromaVectorStore()
-        self.vector_store.add_documents(documents)
+        # # Initialize vector store
+        # self.vector_store = ChromaVectorStore()
+        # self.vector_store.add_documents(documents)
         
-        # Save vector store
-        self.vector_store.save()
+        # # Save vector store
+        # self.vector_store.save()
         
         self.vector_store = ChromaVectorStore.load(vector_db_dir)
 
