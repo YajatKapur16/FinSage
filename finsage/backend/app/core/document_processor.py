@@ -10,6 +10,8 @@ from dataclasses import dataclass
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils.logging import logger
+import datetime
+import traceback
 
 @dataclass
 class DocumentContent:
