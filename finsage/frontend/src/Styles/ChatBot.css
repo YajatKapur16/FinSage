@@ -5,7 +5,7 @@
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;   
-    color: #ffffff;
+    color: #F0F0F0;
     background: #0f0a0a;
     overflow: hidden;
   }
@@ -14,7 +14,7 @@
   {
     position: absolute;
     height:60px;
-    width:83.58%;
+    width: 83.25%;
     right: 0;
     background-color: #0f0a0a;
 
@@ -30,22 +30,7 @@
     padding: 20px;
   }
   
-  .finsage-sign-in {
-    margin-right: 10px;
-    padding: 20px 30px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .finsage-user-icon {
-    width: 40px;
-    height: 40px;
-    background-color: #ccc;
-    border-radius: 50%;
-  }  
-  
+    
   .finsage-logo {
     font-size: 2rem;
     font-family: "Abril Fatface", serif;
