@@ -31,7 +31,7 @@ class FinSageAdvisorSystem:
         # Save vector store
         # self.vector_store.save()
         
-        self.vector_store = ChromaVectorStore.load()
+        self.vector_store = ChromaVectorStore.load(vector_db_dir)
 
         # Initialize language model
         self.language_model = LanguageModelFactory.create_model()

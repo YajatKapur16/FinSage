@@ -18,7 +18,7 @@ def main():
     logger = logging.getLogger(__name__)
 
     pdf_input_dir = r"finsage\backend\app\data\input_pdfs"
-    vector_db_dir = r"finsage\backend\app\data\vector_database\chroma_db"
+    vector_db_dir = r"finsage\backend\app\data\vector_database"
     system_state_dir = r"finsage\backend\app\data\system_state"
 
     logger.info("Initializing FinSageAdvisorSystem")

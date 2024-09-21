@@ -8,7 +8,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from utils.logging import logger
 
 class ChromaVectorStore:
-    def __init__(self, persist_directory: str = r"finsage\backend\app\data\vector_database\chroma_db"):
+    def __init__(self, persist_directory: str = r"finsage\backend\app\data\vector_database"):
         self.embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/multi-qa-mpnet-base-dot-v1")
         self.persist_directory = persist_directory
         self.vectorstore = None
@@ -73,7 +73,7 @@ class ChromaVectorStore:
                 logger.warning("No vector store to save")
 
     @classmethod
-    def load(cls, persist_directory: str = r"finsage\backend\app\data\vector_database\chroma_db"):
+    def load(cls, persist_directory: str = r"finsage\backend\app\data\vector_database"):
         logger.info(f"Loading vector store from {persist_directory}")
         instance = cls(persist_directory=persist_directory)
         instance.vectorstore = Chroma(persist_directory=persist_directory, embedding_function=instance.embedding_model, collection_name='JFM_Chatbot' )
