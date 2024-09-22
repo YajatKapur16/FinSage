@@ -25,7 +25,7 @@ const FinSageChatbot = () => {
       setIsLoading(true);
   
       try {
-        const response = await axios.post('https://3835-136-233-9-98.ngrok-free.app/query', {
+        const response = await axios.post('https://68b4-136-233-9-98.ngrok-free.app/query', {
           text: input
         });
         setTimeout(() => {
