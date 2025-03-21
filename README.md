@@ -35,6 +35,7 @@ pip install -r requirements.txt
 ```
 
 ## Start PostgreSQL Database
+**Follow This Step Only IF You Want Postgres Running**
 Ensure PostgreSQL is running. If using Docker:
 ```sh
 docker run --name finsage_db -e POSTGRES_USER=dev -e POSTGRES_PASSWORD=devpass -e POSTGRES_DB=finsage -p 5432:5432 -d postgres
@@ -49,6 +50,11 @@ DATABASE_URL=postgresql://dev:devpass@localhost:5432/finsage
 If PostgreSQL is installed directly on your system, create the database manually:
 ```sh
 psql -U dev -c "CREATE DATABASE finsage;"
+```
+
+To run the database after initializaton use
+```sh
+docker start finsage_db
 ```
 
 ## Run FastAPI Server
