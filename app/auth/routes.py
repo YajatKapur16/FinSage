@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
+import secrets
 
 from app.database import SessionLocal
 from app.core.security import hash_password, verify_password, create_access_token
+from app.core.email import send_unlock_email
 
 from app.auth.models import User
 from app.auth.schemas import UserCreate, UserResponse, LoginRequest, TokenResponse
@@ -49,6 +51,11 @@ def login_user(login_data: LoginRequest, db: Session = Depends(get_db)):
             user.failed_login_attempts += 1
             if user.failed_login_attempts >= 3:
                 user.is_locked = True
+
+                user.unlock_token = secrets.token_urlsafe(32)
+                db.commit()
+
+                send_unlock_email(user.email, user.unlock_token)
             db.commit()
 
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -63,3 +70,17 @@ def login_user(login_data: LoginRequest, db: Session = Depends(get_db)):
     # Generate JWT token
     access_token = create_access_token({"sub": user.email}, timedelta(minutes=30))
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.get("/unlock/{token}")
+def unlock_account(token:str, db:Session = Depends(get_db)) :
+    user = db.query(User).filter(User.unlock_token==token).first()
+
+    if not user : 
+        raise HTTPException(status_code=400, detail="Invalid unlock token")
+    
+    user.is_locked = False
+    user.failed_login_attempts = 0
+    user.unlock_token = None
+    db.commit()
+
+    return {"message" : "Your account has been unlocked."}
