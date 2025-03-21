@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from app.auth.middleware import get_current_user
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import secrets
@@ -84,3 +85,32 @@ def unlock_account(token:str, db:Session = Depends(get_db)) :
     db.commit()
 
     return {"message" : "Your account has been unlocked."}
+
+@router.get("/me")
+def get_user_profile(user: User = Depends(get_current_user)):
+    return {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "phone_number": user.phone_number
+    }
+
+
+@router.post("/admin/register")
+def register_admin(request: UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == request.email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    new_admin = User(
+        email=request.email,
+        first_name=request.first_name,
+        last_name=request.last_name,
+        phone_number=request.phone_number,
+        hashed_password=hash_password(request.password),
+        is_admin=True  # Admin users are created here
+    )
+    db.add(new_admin)
+    db.commit()
+
+    return {"message": "Admin registered successfully"}

@@ -73,3 +73,33 @@ Content-Type: application/json
 - 200 : Successful login
 - 401 : Invalid credentials
 - 403 : Locked account
+
+# Admin Registration
+- url : `/auth/admin/register/`
+- method : `POST`
+- description : Registers a new admin with email, full name, password. Unique email and password strength is validated.
+- auth required : No.
+
+## Example Request
+```json
+POST /auth/admin/register/
+Content-Type: application/json
+{
+  "email": "admin@example.com",
+  "first_name": "admin",
+  "last_name": "adminus",
+  "phone_number": "123456789",
+  "password": "admin_pass"
+}
+```
+## Example Response
+```json
+{
+  "message": "Admin registered successfully"
+}
+```
+## Possible Responses
+- 200 : Successful login
+- 422 : Validation error
+
+

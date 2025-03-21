@@ -13,3 +13,4 @@ class User(Base):
     failed_login_attempts = Column(Integer, default=0)
     is_locked = Column(Boolean, default=False)
     unlock_token = Column(String, nullable=True)
+    is_admin = Column(Boolean, default=False)
