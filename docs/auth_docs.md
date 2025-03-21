@@ -9,6 +9,34 @@
 }
 ```
 
+# Authentication Middleware
+Handles authentication and authorization for all requests. 
+
+## Usage
+For any protected route -> use the following authentication middlware in the route code.
+```python
+from fastapi import Depends
+from app.auth import get_current_user
+
+@app.get("/protected-endpoint")
+def protected_route(current_user: User = Depends(get_current_user)):
+    # Your code here.
+```
+This uses JWT token and authenticates the user and checks if they are allowed to perform the action.
+
+## Admin Usage
+If you have a route that can only be accessed by admins then use the following code
+```python
+@app.post("/endpoint")
+def admin_only_action(current_user: User = Depends(check_admin)):
+    return {"message": "Admin action performed."}
+```
+
+## Possible Responses
+200 - Success, returns user details.
+401 - Unauthorized.
+403 - Forbidden
+
 # User Registration
 - url : `/auth/register/`
 - method : `POST`
