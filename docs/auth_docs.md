@@ -1,13 +1,8 @@
-# Dummy User To Test Registration & Login
-```json
-{
-  "email": "test_user@example.com",
-  "first_name": "test",
-  "last_name": "user",
-  "phone_number": "9999999999",
-  "password": "test_password"
-}
-```
+# Authentication Flow
+1. User logs in with their credentials. Server returns a JWT token. (Refer User Login)
+2. The frontend must include the token in the Authorization header for all protected requests
+`Authorization : Bearer <TOKEN>`
+3. Server validates the token before all protected routes.
 
 # Authentication Middleware
 Handles authentication and authorization for all requests. 
@@ -131,3 +126,14 @@ Content-Type: application/json
 - 422 : Validation error
 
 
+
+# Dummy User To Test Registration & Login
+```json
+{
+  "email": "test_user@example.com",
+  "first_name": "test",
+  "last_name": "user",
+  "phone_number": "9999999999",
+  "password": "test_password"
+}
+```
