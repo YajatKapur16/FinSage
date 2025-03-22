@@ -70,3 +70,39 @@ def get_latest_threads(
         .all()
     )
     return latest_threads
+
+@router.delete("/threads/{thread_id}")
+def delete_thread(
+    thread_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    thread = db.query(Thread).filter(Thread.id == thread_id).first()
+
+    if not thread:
+        raise HTTPException(status_code=404, detail="Thread not found")
+
+    if thread.user_id != current_user.id and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="You can only delete your own threads")
+
+    db.delete(thread)
+    db.commit()
+    return {"message": "Thread deleted successfully"}
+
+@router.delete("/replies/{reply_id}")
+def delete_reply(
+    reply_id: int,
+    db: Session = Depends(get_db),
+    current_user= Depends(get_current_user),
+):
+    reply = db.query(Reply).filter(Reply.id == reply_id).first()
+
+    if not reply:
+        raise HTTPException(status_code=404, detail="Reply not found")
+
+    if reply.user_id != current_user.id and not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="You can only delete your own replies")
+
+    db.delete(reply)
+    db.commit()
+    return {"message": "Reply deleted successfully"}
