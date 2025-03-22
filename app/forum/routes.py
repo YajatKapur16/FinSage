@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.auth.middleware import get_current_user
@@ -21,10 +21,15 @@ def create_thread(
     db.refresh(thread)
     return thread
 
-# Get all threads
+# Get threads with pagination.
 @router.get("/threads", response_model=List[ThreadResponse])
-def get_threads(db: Session = Depends(get_db)):
-    return db.query(Thread).all()
+def get_threads(
+    db: Session = Depends(get_db),
+    limit: int = Query(10, ge=1, le=100),  # Limit results (default 10, max 100)
+    offset: int = Query(0, ge=0)  # Offset for pagination
+):
+    threads = db.query(Thread).order_by(Thread.created_at.desc()).offset(offset).limit(limit).all()
+    return threads
 
 # Get a specific thread with replies
 @router.get("/threads/{thread_id}", response_model=ThreadDetailResponse)
@@ -53,3 +58,15 @@ def create_reply(
     db.commit()
     db.refresh(reply)
     return reply
+
+@router.get("/latest-threads")
+def get_latest_threads(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)):
+    latest_threads = (
+        db.query(Thread)
+        .order_by(Thread.created_at.desc())
+        .limit(10)
+        .all()
+    )
+    return latest_threads
