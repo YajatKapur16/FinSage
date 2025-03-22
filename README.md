@@ -69,6 +69,11 @@ If PostgreSQL is installed directly on your system, create the database manually
 psql -U dev -c "CREATE DATABASE finsage;"
 ```
 
+## Run DB migrations
+```sh
+alembic upgrade head
+```
+
 ## Run FastAPI Server
 ```sh
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
