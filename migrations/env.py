@@ -3,7 +3,10 @@ from logging.config import fileConfig
 from sqlalchemy import create_engine, pool
 from alembic import context
 from dotenv import load_dotenv
-from app.database import Base  # Import your Base model
+from app.database import Base
+from app.auth import models as auth_models  # Import only inside env.py
+from app.forum import models as forum_models  # Import only here
+
 
 # Load environment variables from .env
 load_dotenv()

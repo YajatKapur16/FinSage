@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from app.database import Base
+from sqlalchemy.orm import relationship
 
 class User(Base):
     __tablename__ = "users"
@@ -14,3 +15,6 @@ class User(Base):
     is_locked = Column(Boolean, default=False)
     unlock_token = Column(String, nullable=True)
     is_admin = Column(Boolean, default=False)
+
+    threads = relationship("Thread", back_populates="user", cascade="all, delete")
+    replies = relationship("Reply", back_populates="user", cascade="all, delete")
