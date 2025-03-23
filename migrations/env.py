@@ -1,31 +1,24 @@
-import os
 from logging.config import fileConfig
+import os
 from sqlalchemy import create_engine, pool
 from alembic import context
-from dotenv import load_dotenv
-from app.database import Base
-from app.auth import models as auth_models  # Import only inside env.py
-from app.forum import models as forum_models  # Import only here
 
-
-# Load environment variables from .env
-load_dotenv()
-
-# Get database URL from environment variables
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Import your SQLAlchemy models
+from app.database import Base  # Adjust this import based on your project structure
 
 # Alembic Config object
 config = context.config
 
-# Set the sqlalchemy.url dynamically from DATABASE_URL
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
-
-# Setup logging
+# Interpret the config file for logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Set target metadata for autogenerate
+# Set up metadata for 'autogenerate' support
 target_metadata = Base.metadata
+
+# Database URL (updated with your credentials)
+DATABASE_URL = "postgresql://dev:devpass@localhost:5432/finsage"
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
@@ -42,9 +35,9 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
-    engine = create_engine(DATABASE_URL, poolclass=pool.NullPool)
+    connectable = create_engine(DATABASE_URL, poolclass=pool.NullPool)
 
-    with engine.connect() as connection:
+    with connectable.connect() as connection:
         context.configure(
             connection=connection, target_metadata=target_metadata
         )
