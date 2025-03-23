@@ -5,6 +5,9 @@ from alembic import context
 
 # Import your SQLAlchemy models
 from app.database import Base  # Adjust this import based on your project structure
+from app.auth.models import User  # Explicitly import models
+from app.forum.models import Thread
+from app.forum.models import Reply
 
 # Alembic Config object
 config = context.config
