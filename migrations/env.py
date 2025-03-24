@@ -8,6 +8,7 @@ from app.database import Base  # Adjust this import based on your project struct
 from app.auth.models import User  # Explicitly import models
 from app.forum.models import Thread
 from app.forum.models import Reply
+from app.expense.models import Expense, ExpenseCategory  # Add expense models
 
 # Alembic Config object
 config = context.config
@@ -19,8 +20,8 @@ if config.config_file_name is not None:
 # Set up metadata for 'autogenerate' support
 target_metadata = Base.metadata
 
-# Database URL (updated with your credentials)
-DATABASE_URL = "postgresql://dev:devpass@localhost:5432/finsage"
+# Get database URL from environment or use default for local development
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://dev:devpass@localhost:5432/finsage")
 
 
 def run_migrations_offline() -> None:
