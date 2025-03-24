@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: finsage-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: finsage
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - finsage-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d finsage"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: finsage-app
+    restart: always
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    runtime: nvidia
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - DATABASE_URL=postgresql://dev:devpass@postgres:5432/finsage
+      - SECRET_KEY=meow
+      - DB_POOL_SIZE=5
+      - DB_MAX_OVERFLOW=10
+      - DB_POOL_TIMEOUT=30
+      - DB_POOL_RECYCLE=3600
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - REFRESH_TOKEN_EXPIRE_DAYS=7
+      - MODEL_PATH=/app/expense_model.pt
+      - LOG_LEVEL=INFO
+      - PYTHONPATH=/app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./migrations:/app/migrations
+      - ./alembic.ini:/app/alembic.ini
+      - app-logs:/app/logs
+    networks:
+      - finsage-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    command: >
+      bash -c '
+        echo "Waiting for postgres..."
+        while ! nc -z postgres 5432; do
+          sleep 1
+        done
+        echo "PostgreSQL started"
+        
+        echo "Running database migrations..."
+        alembic upgrade head
+        
+        echo "Starting application..."
+        uvicorn app.main:app --host 0.0.0.0 --reload
+      '
+
+volumes:
+  postgres-data:
+    name: finsage-postgres-data
+  app-logs:
+    name: finsage-app-logs
+
+networks:
+  finsage-network:
+    name: finsage-network
+    driver: bridge
