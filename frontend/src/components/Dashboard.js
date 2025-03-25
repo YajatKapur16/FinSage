@@ -99,7 +99,7 @@ const Dashboard = () => {
                 Total Expenses
               </Typography>
               <Typography variant="h4">
-                ${analytics.totalExpenses.toFixed(2)}
+              ₹{analytics.totalExpenses.toFixed(2)}
               </Typography>
             </CardContent>
           </Card>
