@@ -26,6 +26,7 @@ import {
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { useForum } from '../../contexts/ForumContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ThreadDialog = ({ open, thread, onClose }) => {
   const {
@@ -35,6 +36,8 @@ const ThreadDialog = ({ open, thread, onClose }) => {
     loading,
     error
   } = useForum();
+  
+  const { currentUser } = useAuth();
 
   const [replies, setReplies] = useState([]);
   const [newReply, setNewReply] = useState('');
@@ -44,7 +47,7 @@ const ThreadDialog = ({ open, thread, onClose }) => {
     if (thread && open) {
       loadThreadDetails();
     }
-  }, [thread, open]);
+  }, [thread, open, getThreadDetails]);  // Added getThreadDetails to dependency array
 
   const loadThreadDetails = async () => {
     if (!thread) return;
@@ -208,14 +211,17 @@ const ThreadDialog = ({ open, thread, onClose }) => {
             Reply
           </Button>
         </Box>
-        <Box sx={{ width: '100%', mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            color="error"
-            startIcon={<DeleteIcon />}
-            onClick={handleDelete}
-          >
-            Delete Thread
-          </Button>
+        <Box sx={{ width: '100%', mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+          {currentUser?.id === thread.user_id && (
+            <Button
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={handleDelete}
+              sx={{ mr: 'auto' }}
+            >
+              Delete Thread
+            </Button>
+          )}
           <Button onClick={onClose}>Close</Button>
         </Box>
       </DialogActions>

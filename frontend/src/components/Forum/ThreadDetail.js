@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Container,
   Paper,
@@ -37,10 +38,26 @@ const ThreadDetail = () => {
   const [replies, setReplies] = useState([]);
   const [newReply, setNewReply] = useState('');
   const [replyError, setReplyError] = useState('');
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     loadThread();
+    fetchUserData();
   }, [threadId]);
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+
+      const response = await axios.get('/auth/users/me', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUserData(response.data);
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+    }
+  };
 
   const loadThread = async () => {
     try {
@@ -146,15 +163,17 @@ const ThreadDetail = () => {
             {thread.description}
           </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              color="error"
-              startIcon={<DeleteIcon />}
-              onClick={handleDelete}
-            >
-              Delete Thread
-            </Button>
-          </Box>
+          {userData && userData.id === thread.user_id && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete Thread
+              </Button>
+            </Box>
+          )}
         </Paper>
       </Box>
 

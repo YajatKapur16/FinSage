@@ -281,7 +281,7 @@ function ForumSection({ preview = false }) {
                     <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                       {thread.title}
                     </Typography>
-                    {!preview && userData && (userData.id === thread.user_id || userData.is_admin) && (
+                    {userData && userData.id === thread.user_id && (
                       <IconButton 
                         size="small" 
                         color="error"
