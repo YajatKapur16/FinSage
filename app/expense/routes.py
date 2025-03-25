@@ -70,24 +70,20 @@ async def get_categories(
     return categories
 
 @router.post("/categories", response_model=ExpenseCategoryResponse)
-async def create_category(
-    category: ExpenseCategoryCreate,
+def create_category(
+    category_data: ExpenseCategoryCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_admin_user)
+    current_user=Depends(get_admin_user),  # Ensure only admins can create categories
 ):
-    """Create a new expense category (admin only)."""
-    existing = db.query(ExpenseCategory).filter(ExpenseCategory.name == category.name).first()
-    if existing:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Category with this name already exists"
-        )
-    
-    new_category = ExpenseCategory(**category.model_dump())
-    db.add(new_category)
+    """Create a new expense category (Admin only)"""
+    category = ExpenseCategory(
+        name=category_data.name,
+        description=category_data.description
+    )
+    db.add(category)
     db.commit()
-    db.refresh(new_category)
-    return new_category
+    db.refresh(category)
+    return category
 
 # Natural language processing endpoint
 @router.post("/process", response_model=ExpensePredictionResponse)

@@ -91,7 +91,7 @@ async def login(
         if user.is_locked:
             logger.warning(f"Login attempt on locked account: {user.email}")
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
+                status_code=status.HTTP_403_FORBIDDEN,  # Ensure correct status code for locked accounts
                 detail="Account is locked. Please contact support."
             )
         

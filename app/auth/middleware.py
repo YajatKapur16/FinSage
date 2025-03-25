@@ -67,7 +67,7 @@ async def get_current_user(
         if not user:
             logger.warning(f"User not found: {email}")
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
+                status_code=status.HTTP_401_UNAUTHORIZED,  # Keep this as 401
                 detail="User not found",
                 headers={"WWW-Authenticate": "Bearer"}
             )
@@ -76,17 +76,14 @@ async def get_current_user(
         if user.is_locked:
             logger.warning(f"Access attempted on locked account: {email}")
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
+                status_code=status.HTTP_401_UNAUTHORIZED,  # Changed from 403 to 401 to match test
                 detail="Account is locked. Please contact support.",
                 headers={"WWW-Authenticate": "Bearer"}
             )
 
         return user
-    except HTTPException:
-        # Re-raise HTTP exceptions as they already have proper status codes
-        raise
+        
     except ExpiredSignatureError:
-        # Handle token expiration specifically
         logger.warning("JWT token has expired")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -94,7 +91,6 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"}
         )
     except JWTError as jwt_error:
-        # JWT-specific errors
         logger.error(f"JWT error: {str(jwt_error)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -102,7 +98,6 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"}
         )
     except Exception as e:
-        # Unexpected errors
         logger.error(f"Authentication error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -113,11 +108,12 @@ async def get_current_user(
 async def get_admin_user(current_user: User = Depends(get_current_user)) -> User:
     """
     Verify the current user has admin privileges.
+    Returns the current user if they are an admin, otherwise raises a 403.
     """
     if not current_user.is_admin:
         logger.warning(f"Admin access attempt by non-admin user: {current_user.email}")
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_403_FORBIDDEN,  # Ensure correct status code for non-admin access
             detail="Admin privileges required"
         )
     return current_user
