@@ -84,11 +84,17 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       setError('');
+      setLoading(true);
       const response = await authService.register(userData);
+      // Don't automatically log in after registration
+      // This makes the flow more explicit and secure
       return response;
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed');
+      const errorMessage = err.message || 'Registration failed. Please try again.';
+      setError(errorMessage);
       throw err;
+    } finally {
+      setLoading(false);
     }
   };
 

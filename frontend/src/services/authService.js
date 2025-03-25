@@ -29,6 +29,28 @@ class AuthService {
     }
   }
 
+  async register(userData) {
+    try {
+      // Use axios directly to avoid interceptors for registration
+      const response = await axios.post(`${API_URL}/auth/register`, userData);
+      if (response.data) {
+        // Return the registered user data
+        return response.data;
+      }
+      throw new Error('Registration failed');
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
+      // Throw a more user-friendly error message based on the backend response
+      if (error.response?.status === 409) {
+        throw new Error('Email already registered');
+      } else if (error.response?.status === 400) {
+        throw new Error(error.response.data.detail || 'Invalid registration data');
+      } else {
+        throw new Error(error.response?.data?.detail || 'Registration failed. Please try again.');
+      }
+    }
+  }
+
   async refreshToken() {
     try {
       const refreshToken = localStorage.getItem('refreshToken');

@@ -23,6 +23,7 @@ const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -99,12 +100,33 @@ const LoginSignup = () => {
           email: formData.email,
           password: formData.password
         });
+        navigate('/dashboard');
       } else {
-        await register(formData);
+        // Registration flow
+        await register({
+          email: formData.email,
+          password: formData.password,
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          phone_number: formData.phone_number
+        });
+        // Show success message and switch to login form
+        setError('');
+        setSuccess('Registration successful! Please log in.');
         setIsLogin(true);
+        // Clear form data
+        setFormData({
+          email: '',
+          password: '',
+          first_name: '',
+          last_name: '',
+          phone_number: ''
+        });
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'An error occurred');
+      console.error('Auth error:', err);
+      // Use the error message from the backend if available
+      setError(err.message || 'An error occurred during authentication. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -153,6 +175,12 @@ const LoginSignup = () => {
             >
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </Typography>
+
+            {success && (
+              <Alert severity="success" sx={{ width: '100%', mb: 2 }}>
+                {success}
+              </Alert>
+            )}
 
             {(error || authError) && (
               <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
