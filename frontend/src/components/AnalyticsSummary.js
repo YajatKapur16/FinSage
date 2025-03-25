@@ -114,7 +114,7 @@ function AnalyticsSummary({ preview = false }) {
                     Total Expenses
                   </Typography>
                   <Typography variant="h4" sx={{ mt: 1, fontWeight: 600 }}>
-                    {formatCurrency(analytics.total_expenses)}
+                    ₹{analytics.total_expenses.toFixed(2)}
                   </Typography>
                 </CardContent>
               </Card>
@@ -135,7 +135,7 @@ function AnalyticsSummary({ preview = false }) {
                         <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip 
-                          formatter={(value) => formatCurrency(value)}
+                          formatter={(value) => `₹${value.toFixed(2)}`}
                           labelStyle={{ color: 'black' }}
                         />
                         <Line 
@@ -180,13 +180,16 @@ function AnalyticsSummary({ preview = false }) {
                         ))}
                       </Pie>
                       <Tooltip 
-                        formatter={(value) => formatCurrency(value)}
+                        formatter={(value) => `₹${value.toFixed(2)}`}
                         labelStyle={{ color: 'black' }}
                       />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 </Box>
+                <Typography variant="subtitle2" sx={{ textAlign: 'center', mt: 1 }}>
+                  Total: ₹{analytics.total_expenses.toFixed(2)}
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
