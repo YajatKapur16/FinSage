@@ -20,7 +20,7 @@ class ThreadResponse(BaseModel):
 
 # Schema for creating a reply
 class ReplyCreate(BaseModel):
-    content: str
+    content: str = Field(..., min_length=1, max_length=1000)
 
 # Schema for response when returning reply details
 class ReplyResponse(BaseModel):

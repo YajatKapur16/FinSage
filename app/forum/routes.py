@@ -9,12 +9,18 @@ from typing import List
 router = APIRouter(prefix="/forum", tags=["Forum"])
 
 # Create a new thread
-@router.post("/threads", response_model=ThreadResponse)
+@router.post("/threads", response_model=ThreadResponse, status_code=201)
 def create_thread(
     thread_data: ThreadCreate,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
+    if not thread_data.title.strip():
+        raise HTTPException(status_code=422, detail="Title cannot be empty")
+        
+    if len(thread_data.title) > 100:
+        raise HTTPException(status_code=422, detail="Title too long")
+
     thread = Thread(title=thread_data.title, description=thread_data.description, user_id=current_user.id)
     db.add(thread)
     db.commit()
@@ -42,7 +48,7 @@ def get_thread(thread_id: int, db: Session = Depends(get_db)):
     return ThreadDetailResponse(**thread.__dict__, replies=replies)
 
 # Create a reply to a thread
-@router.post("/threads/{thread_id}/replies", response_model=ReplyResponse)
+@router.post("/threads/{thread_id}/replies", response_model=ReplyResponse, status_code=201)
 def create_reply(
     thread_id: int,
     reply_data: ReplyCreate,
@@ -78,12 +84,15 @@ def delete_thread(
     current_user=Depends(get_current_user),
 ):
     thread = db.query(Thread).filter(Thread.id == thread_id).first()
-
     if not thread:
         raise HTTPException(status_code=404, detail="Thread not found")
-
+        
+    # Check if user is owner or admin
     if thread.user_id != current_user.id and not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="You can only delete your own threads")
+        raise HTTPException(
+            status_code=403,
+            detail="You can only delete your own threads"
+        )
 
     db.delete(thread)
     db.commit()
@@ -93,15 +102,18 @@ def delete_thread(
 def delete_reply(
     reply_id: int,
     db: Session = Depends(get_db),
-    current_user= Depends(get_current_user),
+    current_user=Depends(get_current_user),
 ):
     reply = db.query(Reply).filter(Reply.id == reply_id).first()
-
     if not reply:
         raise HTTPException(status_code=404, detail="Reply not found")
 
+    # Check if user is owner or admin
     if reply.user_id != current_user.id and not current_user.is_admin:
-        raise HTTPException(status_code=403, detail="You can only delete your own replies")
+        raise HTTPException(
+            status_code=403,
+            detail="You can only delete your own replies"
+        )
 
     db.delete(reply)
     db.commit()

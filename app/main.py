@@ -125,7 +125,13 @@ def custom_openapi():
         models = get_pydantic_models(module)
         for model_name, model_class in models.items():
             try:
+                # Get the complete schema including nested models
                 schema = model_class.model_json_schema()
+                # Add additional properties from model_config if they exist
+                if hasattr(model_class, "model_config"):
+                    config = getattr(model_class, "model_config")
+                    if "json_schema_extra" in config:
+                        schema.update(config["json_schema_extra"])
                 openapi_schema["components"]["schemas"][model_name] = schema
             except Exception as e:
                 logger.warning(f"Failed to generate schema for {model_name}: {str(e)}")
