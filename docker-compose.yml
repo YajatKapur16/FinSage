@@ -88,6 +88,42 @@ services:
         uvicorn app.main:app --host 0.0.0.0 --reload
       '
 
+  # test:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - PYTHONPATH=/app
+  #     - DATABASE_URL=postgresql://dev:devpass@postgres:5432/finsage_test
+  #     - SECRET_KEY=test_secret_key
+  #     - MODEL_PATH=/app/tests/fixtures/test_model.pt
+  #   volumes:
+  #     - .:/app
+  #     - app-logs:/app/logs
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   command: >
+  #     bash -c '
+  #       echo "Waiting for postgres..."
+  #       while ! nc -z postgres 5432; do
+  #         sleep 1
+  #       done
+  #       echo "PostgreSQL started"
+        
+  #       echo "Creating test database..."
+  #       PGPASSWORD=devpass psql -h postgres -U dev -d finsage -c "CREATE DATABASE finsage_test;"
+        
+  #       echo "Running database migrations..."
+  #       sleep 2
+  #       DATABASE_URL=postgresql://dev:devpass@postgres:5432/finsage_test alembic upgrade head
+        
+  #       echo "Running tests..."
+  #       pytest -v --disable-warnings
+  #     '
+  #   networks:
+  #     - finsage-network
+
 volumes:
   postgres-data:
     name: finsage-postgres-data
