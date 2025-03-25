@@ -8,7 +8,8 @@ import {
   Select,
   MenuItem,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useExpense } from '../../contexts/ExpenseContext';
@@ -108,6 +109,9 @@ const ExpenseForm = ({ onClose, initialData = null }) => {
         value={formData.amount}
         onChange={handleChange}
         required
+        InputProps={{
+          startAdornment: <Typography>₹</Typography>
+        }}
         inputProps={{ step: "0.01", min: "0" }}
         sx={{ mb: 2 }}
       />

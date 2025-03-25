@@ -13,9 +13,11 @@ import {
   DialogContent,
   DialogActions
 } from '@mui/material';
+import { useExpense } from '../contexts/ExpenseContext';
 import expenseService from '../services/expenseService';
 
 function ExpenseForm({ onSubmitSuccess }) {
+  const { fetchExpenses } = useExpense();
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -85,6 +87,9 @@ function ExpenseForm({ onSubmitSuccess }) {
       setPrediction(null);
       setConfirmDialogOpen(false);
       
+      // Fetch updated expenses after confirming
+      await fetchExpenses();
+      
       if (onSubmitSuccess) {
         onSubmitSuccess();
       }
@@ -94,7 +99,7 @@ function ExpenseForm({ onSubmitSuccess }) {
     } finally {
       setLoading(false);
     }
-  }, [description, amount, selectedCategoryId, onSubmitSuccess]);
+  }, [description, amount, selectedCategoryId, onSubmitSuccess, fetchExpenses]);
 
   return (
     <Paper elevation={2} sx={{ p: 3, mb: 3 }}>

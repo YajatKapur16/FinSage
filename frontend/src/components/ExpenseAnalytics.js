@@ -110,7 +110,7 @@ function ExpenseAnalytics({ type = 'monthly' }) {
           </Typography>
         </>
       ) : (
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="50%" height={250}>
           <BarChart
             data={chartData}
             margin={{

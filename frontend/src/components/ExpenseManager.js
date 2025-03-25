@@ -64,19 +64,21 @@ const ExpenseManager = () => {
   const handleCloseForm = () => {
     setSelectedExpense(null);
     setOpenForm(false);
+    fetchExpenses(); // Refresh after closing form
   };
 
   const handleDelete = async (id) => {
     try {
       setDeleteError('');
       await deleteExpense(id);
+      fetchExpenses(); // Refresh after deletion
     } catch (error) {
       setDeleteError('Failed to delete expense');
     }
   };
 
-  const handleSubmit = (expenseData) => {
-    fetchExpenses(); // Refresh the list after submission
+  const handleSubmit = async (expenseData) => {
+    await fetchExpenses(); // Ensure list is refreshed after submission
     handleCloseForm();
   };
 
@@ -94,17 +96,6 @@ const ExpenseManager = () => {
         <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
           Expense Manager
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenForm()}
-          sx={{
-            bgcolor: '#FF6B00',
-            '&:hover': { bgcolor: '#FF8C00' }
-          }}
-        >
-          Add Expense
-        </Button>
       </Box>
 
       {(error || deleteError) && (
@@ -160,7 +151,7 @@ const ExpenseManager = () => {
                       <TableCell>{expense.description}</TableCell>
                       <TableCell>{expense.category.name}</TableCell>
                       <TableCell align="right">
-                        ${expense.amount.toFixed(2)}
+                        ₹{expense.amount.toFixed(2)}
                       </TableCell>
                       <TableCell>
                         {format(new Date(expense.created_at), 'MMM d, yyyy')}

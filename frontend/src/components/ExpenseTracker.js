@@ -415,7 +415,7 @@ function ExpenseTracker({ preview = false, limit = 10 }) {
                     />
                   </TableCell>
                   <TableCell align="right">
-                    ${expense.amount.toFixed(2)}
+                    ₹{expense.amount.toFixed(2)}
                   </TableCell>
                   {!preview && (
                     <TableCell>
@@ -517,7 +517,7 @@ function ExpenseTracker({ preview = false, limit = 10 }) {
                 <strong>Description:</strong> {editingExpense.description}
               </Typography>
               <Typography variant="body2">
-                <strong>Amount:</strong> ${editingExpense.amount.toFixed(2)}
+                <strong>Amount:</strong> ₹{editingExpense.amount.toFixed(2)}
               </Typography>
               <Typography variant="body2">
                 <strong>Category:</strong> {editingExpense.category?.name}
