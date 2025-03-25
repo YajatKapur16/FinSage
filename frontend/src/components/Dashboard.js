@@ -111,14 +111,38 @@ const Dashboard = () => {
             <Typography variant="h6" gutterBottom>
               Monthly Expense Trends
             </Typography>
-            <Box sx={{ height: 300 }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={analytics.monthlyTrends}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="amount" fill={theme.palette.primary.main} />
+            <Box sx={{ height: 300, width: '100%', maxWidth: '100%' }}>
+              <ResponsiveContainer>
+                <BarChart
+                  data={analytics.monthlyTrends}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fill: theme.palette.text.secondary }}
+                    axisLine={{ stroke: theme.palette.divider }}
+                  />
+                  <YAxis
+                    tick={{ fill: theme.palette.text.secondary }}
+                    axisLine={{ stroke: theme.palette.divider }}
+                    tickFormatter={(value) => `₹${value}`}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: theme.palette.background.paper,
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderRadius: 8
+                    }}
+                    formatter={(value) => [`₹${value}`, 'Amount']}
+                    labelStyle={{ color: theme.palette.text.primary }}
+                  />
+                  <Bar
+                    dataKey="amount"
+                    fill={theme.palette.primary.main}
+                    radius={[4, 4, 0, 0]}
+                    maxBarSize={50}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </Box>

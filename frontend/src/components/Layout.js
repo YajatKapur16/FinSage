@@ -23,6 +23,7 @@ import {
   AttachMoney,
   Forum as ForumIcon,
   Person,
+  SmartToy,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { motion } from 'framer-motion';
@@ -58,6 +59,7 @@ const Layout = () => {
     { text: 'Dashboard', icon: <Dashboard />, path: '/dashboard' },
     { text: 'Expenses', icon: <AttachMoney />, path: '/expenses' },
     { text: 'Forum', icon: <ForumIcon />, path: '/forum' },
+    { text: 'AI Assistant', icon: <SmartToy />, path: '/chatbot' },
     { text: 'Profile', icon: <Person />, path: '/profile' },
   ];
 

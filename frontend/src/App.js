@@ -15,6 +15,7 @@ import Expenses from './components/ExpenseManager';
 import Forum from './components/Forum/Forum';
 import ThreadDetail from './components/Forum/ThreadDetail';
 import Profile from './components/Profile';
+import ChatBot from './components/ChatBot';
 import PrivateRoute from './components/PrivateRoute';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
@@ -39,6 +40,7 @@ function App() {
                     <Route path="/expenses" element={<Expenses />} />
                     <Route path="/forum" element={<Forum />} />
                     <Route path="/forum/threads/:threadId" element={<ThreadDetail />} />
+                    <Route path="/chatbot" element={<ChatBot />} />
                     <Route path="/profile" element={<Profile />} />
                   </Route>
                   
